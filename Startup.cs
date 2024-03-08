@@ -43,6 +43,7 @@ namespace BookStore
             options.UseNpgsql(Configuration.GetConnectionString("BookStoreConnectionString")));
 
             services.AddTransient<IBookRepository, BookRepository>();
+            services.AddTransient<IAccountRepository, AccountRepository>();
 
             // Registration of Identity Service
             services.AddIdentity<ApplicationUser, IdentityRole>()
