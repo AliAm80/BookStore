@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookStore.Interfaces;
 using BookStore.Models.Book;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -11,6 +12,7 @@ namespace BookStore.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class BooksController : ControllerBase
     {
         private readonly IBookRepository _bookRepository;
@@ -20,6 +22,7 @@ namespace BookStore.Controllers
             _bookRepository = bookRepository;
         }
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllBooks()
         {
             var books = await _bookRepository.GetAllBooks();
