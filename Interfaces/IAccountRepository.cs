@@ -11,5 +11,6 @@ namespace BookStore.Interfaces
     public interface IAccountRepository
     {
         Task<IdentityResult> SignUp(SignUpDto signUpDto);
+        Task<string> Login(LoginDto loginDto);
     }
 }

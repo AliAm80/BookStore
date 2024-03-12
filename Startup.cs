@@ -36,9 +36,32 @@ namespace BookStore
         {
             services.AddControllers();
             // Add Swagger 
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(conf =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+                conf.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    // Location of token definition
+                    In = ParameterLocation.Header,
+                    Description = "Please insert jwt token here",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "bearer"
+                });
+                conf.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                    }
+                });
             });
 
             // Add DbContext and Set ConnectionString
@@ -52,7 +75,8 @@ namespace BookStore
             services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<BookStoreContext>()
                     .AddDefaultTokenProviders();
-            // Add JWT Configurations
+
+            // Add Authentication & JWT Configurations
             services.AddAuthentication(option =>
             {
                 option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
